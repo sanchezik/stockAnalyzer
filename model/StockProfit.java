@@ -55,4 +55,15 @@ public class StockProfit {
     public void setProfit(double profit) {
         this.profit = profit;
     }
+
+    @Override
+    public String toString() {
+        return "StockProfit{" +
+                "buyDate='" + getBuyDate() + '\'' +
+                ", buyPrice=" + getBuyPrice() +
+                ", sellDate='" + getSellDate() + '\'' +
+                ", sellPrice=" + getSellPrice() +
+                ", profit=" + getProfit() +
+                '}';
+    }
 }
