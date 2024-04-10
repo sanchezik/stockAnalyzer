@@ -34,7 +34,7 @@ public class StockAnalyzer {
         return prices;
     }
 
-    private static StockProfit maxProfit(String stockName, int year) throws IOException {
+    public static StockProfit maxProfit(String stockName, int year) throws IOException {
         List<StockPrice> prices = readStockPrices("input/" + stockName + ".csv");
         StockProfit sp = null;
         double maxProfit = 0;
