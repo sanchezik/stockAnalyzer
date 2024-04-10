@@ -10,6 +10,7 @@ import java.util.List;
 public class StockAnalyzer {
 
     private static final String ERR_MSG_USER_INPUT = "Usage: java StockAnalyzer <stockName> <year>";
+    private static final String ERR_MSG_CORRUPTED_DATA = "Data in the file is corrupted";
 
     private static List<StockPrice> readStockPrices(String filename) throws IOException {
         List<StockPrice> prices = new ArrayList<>();
@@ -27,7 +28,7 @@ public class StockAnalyzer {
                 prices.add(new StockPrice(date, open, high, low, close));
             }
         } catch (NumberFormatException e) {
-            throw new IOException("Data in the file is corrupted");
+            throw new IOException(ERR_MSG_CORRUPTED_DATA);
         }
         br.close();
         return prices;
@@ -37,22 +38,26 @@ public class StockAnalyzer {
         List<StockPrice> prices = readStockPrices("input/" + stockName + ".csv");
         StockProfit sp = null;
         double maxProfit = 0;
-        for (int i = 0; i < prices.size() - 1; i++) {
-            StockPrice buyPrice = prices.get(i);
-            if (Integer.parseInt(buyPrice.getDate().split("-")[0]) != year) {
-                continue;
-            }
-            for (int j = i + 1; j < prices.size(); j++) {
-                StockPrice sellPrice = prices.get(j);
-                if (Integer.parseInt(sellPrice.getDate().split("-")[0]) != year) {
-                    break;
+        try {
+            for (int i = 0; i < prices.size() - 1; i++) {
+                StockPrice buyPrice = prices.get(i);
+                if (Integer.parseInt(buyPrice.getDate().split("-")[0]) != year) {
+                    continue;
                 }
-                double profit = sellPrice.getClose() - buyPrice.getOpen();
-                if (profit > maxProfit) {
-                    maxProfit = profit;
-                    sp = new StockProfit(buyPrice.getDate(), buyPrice.getOpen(), sellPrice.getDate(), sellPrice.getClose(), maxProfit);
+                for (int j = i + 1; j < prices.size(); j++) {
+                    StockPrice sellPrice = prices.get(j);
+                    if (Integer.parseInt(sellPrice.getDate().split("-")[0]) != year) {
+                        break;
+                    }
+                    double profit = sellPrice.getClose() - buyPrice.getOpen();
+                    if (profit > maxProfit) {
+                        maxProfit = profit;
+                        sp = new StockProfit(buyPrice.getDate(), buyPrice.getOpen(), sellPrice.getDate(), sellPrice.getClose(), maxProfit);
+                    }
                 }
             }
+        } catch (NumberFormatException e) {
+            throw new IOException(ERR_MSG_CORRUPTED_DATA);
         }
         return sp;
     }

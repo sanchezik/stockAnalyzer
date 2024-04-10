@@ -1,5 +1,7 @@
 package model;
 
+import java.text.DecimalFormat;
+
 public class StockProfit {
 
     private String buyDate;
@@ -58,12 +60,17 @@ public class StockProfit {
 
     @Override
     public String toString() {
-        return "StockProfit{" +
-                "buyDate='" + getBuyDate() + '\'' +
-                ", buyPrice=" + getBuyPrice() +
-                ", sellDate='" + getSellDate() + '\'' +
-                ", sellPrice=" + getSellPrice() +
-                ", profit=" + getProfit() +
-                '}';
+        DecimalFormat df = new DecimalFormat("#.000000");
+        StringBuilder sb = new StringBuilder();
+        if (getBuyDate() != null) {
+            sb.append("Buy date: ").append(getBuyDate()).append("\n");
+        }
+        sb.append("Buy price: ").append(getBuyPrice()).append("\n");
+        if (getSellDate() != null) {
+            sb.append("Sell date: ").append(getSellDate()).append("\n");
+        }
+        sb.append("Sell price: ").append(getSellPrice()).append("\n");
+        sb.append("Profit: ").append(df.format(getProfit()));
+        return sb.toString();
     }
 }
